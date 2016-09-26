@@ -152,7 +152,7 @@ footer p {
 .blog-post .article-body img {
   margin: 2% 0% 2% 0%;
   padding: 0 8% 0 8%;
-  max-width: 500%;
+  max-width: 100%;
 }
 
 .blog-post .article-body #map{
@@ -182,6 +182,8 @@ code {
   font-size: 0.9em;
 }
 
+
+
 /* Styling for portfolio entries */
 
 .portfolio-item {
@@ -197,6 +199,11 @@ code {
 }
 
 #flood-fill {
-  max-width: 300px;
+  max-width: 50%;
   border: 1px solid black;
+}
+
+#graph {
+  padding: 0 8% 0 8%;
+  max-width: 84%;
 }
