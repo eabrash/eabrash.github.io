@@ -1,7 +1,13 @@
+/* Set default font and size for text */
+
 body {
   font-family: "Lato", Verdana, sans-serif;
   font-size: 1.1rem;
+  position: relative;
+  background-color: #F9F9F9;
 }
+
+/* Styling for header banner, containing main heading and nav on photo background */
 
 header {
   text-align: center;
@@ -23,90 +29,165 @@ header ul {
   margin-top: 15%;
   margin-left: 0;
   padding: 0;
-  /*background-color: rgba(255, 255, 255, 0.5);*/
+  background-color: rgba(255, 255, 255, 0.4);
 }
 
 header li {
   display: inline-block;
   padding: 0.5% 1.0% 0.5% 1.0%;
   margin: 0% 0.5% 0% 0.5%;
-  background-color: rgba(255, 255, 255, 0.4);
-  border-radius: 5px;
+  /*background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 5px;*/
 }
 
-header li a {
+header a {
   text-decoration: none;
+  color: black;
+}
+
+header a:visited {
+  color: #333366;
 }
 
 header li:hover {
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
-#banner {
-  width: 70%;
-  overflow: hidden;
-  padding-left: 15%;
-  padding-right: 70%;
-  position: relative;
-  overflow: hidden;
-  display: table;
-  padding-top: 2%;
-  padding-bottom: 2%;
-}
+/* Styling for main body of index page */
 
-#landing-gallery {
-  width: 100%;
-  margin-left: 18%;
-  margin-right: 18%;
+#landing-page-welcome {
+  width: 60%;
+  margin-left: 20%;
+  margin-right: 20%;
   margin: 0 auto;
   text-align: center;
   padding-top: 4vh;
   padding-bottom: 4vh;
 }
 
-#image-panel {
-  display: table-cell;
-  vertical-align: middle;
-  text-align: center;
-  padding: 1%;
-  width: 40%;
-}
-
-#landing-gallery img {
-  width: 100%;
-  border-radius: 100%;
-  float: left;
-  background: blue;
-}
-
 #intro-text {
-
   float: left;
   width: 100%;
   vertical-align: middle;
   padding-left: 2%;
   padding-right: 2%;
-  padding-top: 5%;
-  padding-bottom: 5%;
+  padding-top: 8%;
+  padding-bottom: 8%;
 }
 
-.panel {
-  width: 30%;
-  display: inline-block;
+#intro-text li {
+  list-style-type: none;
 }
+
+.non-footer {
+  min-height: 91vh;
+}
+
+/*Styling of footer with copyright statement */
 
 footer {
   clear: both;
   position: relative;
-  background-color: lightgray;
+  background-image: url("../assets/bottom_beach-01.png");
+  background-size: cover;
   width: 100vw;
-    height: 4.5vh;
+  height: 5vh;
   font-size: 1.5vw;
+  margin: 0;
+  text-align: right;
 }
 
 footer p {
-  padding: 1vh 1vw 1vh 1vw;
+  padding: 1vh 3vw 2vh 1vw;
   font-size: 1.5vw;
+}
+
+/* Styling for main body of About page. */
+
+#about-me-content {
+  width: 60%;
+  margin-left: 20%;
+  margin-right: 20%;
+  margin: 0 auto;
+  text-align: left;
+  padding-top: 4vh;
+  padding-bottom: 4vh;
+}
+
+#about-me-content img {
+  max-width: 20%;
+  float: left;
+  border-radius: 100%;
+  text-align: center;
+  margin: 0 2vw 0 0;
+}
+
+#about-me-content .below-image {
+  clear: both;
+  padding-top: 2%;
+}
+
+/* Styling for blog posts */
+
+#blog-container {
+  width: 60%;
+  margin-left: 20%;
+  margin-right: 20%;
+  margin: 0 auto;
+  text-align: left;
+  padding-top: 4vh;
+  padding-bottom: 4vh;
+}
+
+.blog-post {
+  border: 2px solid lightgray;
+  margin: 3% 0 3% 0;
+}
+
+.blog-post .article-body {
+  margin: 2% 5% 2% 5%;
+  padding: 1% 5% 1% 5%;
+}
+
+.blog-post .article-body img{
+  margin: 2% 0% 2% 0%;
+  padding: 0 15% 0 15%;
+}
+
+.blog-post .article-header {
+  background: lightgray;
+  padding: 1% 5% 1% 10%;
+  margin-top: 0;
+  border-bottom: 2px solid lightgray;
+  overflow: hidden;
+}
+
+.blog-post h3 {
+  font-size: 1rem;
+  color: #666666;
+}
+
+.blog-post li {
+  padding-top: 2%;
+  padding-bottom: 2%;
+}
+
+code {
+  font-size: 0.9em;
+}
+
+/* Styling for portfolio entries */
+
+.portfolio-item {
+  border: 2px solid lightgray;
+  margin: 3% 0 3% 0;
+  /*margin: 2% 5% 2% 5%;*/
+  padding: 1% 5% 2% 5%;
+}
+
+#flood-fill {
+  max-width: 300px;
+  border: 1px solid black;
 }
 
 /*nav {

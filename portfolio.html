@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+
+<html>
+
+  <head>
+    <title>Emi Programs</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="styles/normalize.css">
+    <link href="https://fonts.googleapis.com/css?family=Cedarville+Cursive|Dawning+of+a+New+Day|Homemade+Apple|Lato|Questrial|Swanky+and+Moo+Moo|Walter+Turncoat" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
+  </head>
+
+  <body>
+
+    <div class="non-footer">
+      <header>
+          <h1>e m i p r o g r a m s</h1>
+          <nav>
+            <ul>
+              <a href="index.html"><li>home</li></a>
+              <a href="about.html"><li>about</li></a>
+              <a href="blog.html"><li>blog</li></a>
+              <a href="portfolio.html"><li>portfolio</li></a>
+            </ul>
+          </nav>
+      </header>
+
+      <section id="blog-container">
+
+        <h2>Portfolio</h2>
+
+        <p>This section includes some examples of code I've written (and/or built off of existing, publicly available code). This section will be updated as I do new and exciting things in the months to come!</p>
+
+        <article class="portfolio-item">
+
+            <h3>Twitter streaming and analysis</h3>
+
+            <p>Python code for analysis of tweets. Allows the user to stream large volumes of Twitter data and perform a simple sentiment analysis on tweets containing selected keywords.</p>
+            <p>Link: <a href="https://github.com/eabrash/Emi-Programs">Twitter streaming repo</a></p>
+            <p>The graph below represents sample output from this program for tweets containing the word 'college':</p>
+            <img src="./assets/college.png" alt="Graph showing average sentiment scores for tweets containing the word college, originating from different regions of the San Francisco Bay Area" title="Average sentiment scores for tweets containing the word college, originating from users in different parts of the San Francisco Bay Area">
+            <p>N.B. The program in its current form doesn't do the analysis and make the graph, it just spits out the raw data needed for analyses and graphs.</p>
+
+        </article>
+
+        <article class="portfolio-item">
+
+          <h3>Flood fill algorithm</h3>
+
+          <div class="article-body">
+            <p>Ruby code implementing a simple flood fill algorithm (in command line; I soon hope to use SDL to make this interactive and visual, like a normal flood fill in Paint). Recursive algorithm using depth-first traversal.</p>
+            <p>Link: <a href="https://github.com/eabrash/flood_fill">Command line flood fill</a><p>
+            <p>Screencap of program in action:</p>
+            <img id="flood-fill" src="./assets/Screen Shot 2016-09-25 at 10.53.36 PM.png" alt="Screencap of command line flood fill">
+        </article>
+
+      </section>
+
+    <footer>
+      <p>&copy; 2016 Emily Abrash</p>
+    </footer>
+
+  </body>
+
+</html>

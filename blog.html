@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+
+<html>
+
+  <head>
+    <title>Emi Programs</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="styles/normalize.css">
+    <link href="https://fonts.googleapis.com/css?family=Cedarville+Cursive|Dawning+of+a+New+Day|Homemade+Apple|Lato|Questrial|Swanky+and+Moo+Moo|Walter+Turncoat" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
+  </head>
+
+  <body>
+
+    <div class="non-footer">
+      <header>
+          <h1>e m i p r o g r a m s</h1>
+          <nav>
+            <ul>
+              <a href="index.html"><li>home</li></a>
+              <a href="about.html"><li>about</li></a>
+              <a href="blog.html"><li>blog</li></a>
+              <a href="portfolio.html"><li>portfolio</li></a>
+            </ul>
+          </nav>
+      </header>
+
+      <section id="blog-container">
+
+        <article class="blog-post">
+
+          <div class="article-header">
+            <h2>Streaming Twitter: Putting filters on your query</h2>
+            <h3>Emily Abrash | Sunday, October 5, 2014</h3>
+          </div>
+
+          <div class="article-body">
+
+            <p>Depending on your interests, a simple, real-time stream that samples worldwide Twitter data may be exactly what you need. For some applications, however, it’s helpful to sample a more specific subset of Tweets – for instance, ones from a certain location, containing a particular term or written in a given language. It’s indeed possible to query Twitter using filters like these, but there are several different ways of doing so, each with its own pros and cons.</p>
+
+            <h4>Streaming vs. Search APIs</h4>
+
+            <p>One key distinction, which it took me awhile to understand – and which I understand at more of a practical than a technical level – is that between streaming APIs (e.g., Twitter stream) and REST APIs (e.g., Twitter search). Basically, a streaming API allows you to open a persistent connection to Twitter’s remote server, and to collect a continuous stream of data from this server. A REST API, on the other hand, allows you to open a transient connection to Twitter’s remote server for a specific query, then returns the data and closes the connection. For a nice explanation with diagrams, I recommend looking at Twitter’s overview of <a href="https://dev.twitter.com/streaming/overview">streaming vs. REST APIs</a>.</p>
+
+            <p>You can request Tweets with specific properties using either the streaming or the search Twitter API, and the “better” choice will depend on what you’re trying to do.</p>
+            <ul>
+              <li>If, like me, you want to do a data-mining project, you’ll probably want to use Twitter stream rather than Twitter search. A persistent stream means that you capture as much of your target Tweet population as possible, and also means that you don’t have to worry about rate limits (limits to the number of queries you can make in a given time period), which seem to be much more stringent for Twitter search than for Twitter stream.</li>
+              <li>If, instead of data-mining, you’re trying to make an application that takes input from a user, queries Twitter using that input, and returns a result to the user, Twitter search might be more appropriate.
+            </ul>
+            <p>Because I’ve worked primarily with streaming APIs, the remainder of the post will focus on these.</p>
+
+
+            <h4>Filter Types</h4>
+
+            Using the streaming API, you can apply a <a href="https://dev.twitter.com/streaming/overview/request-parameters">number of filters</a> to your query. Some of the most useful filters, from a data-mining perspective, include:
+            <ul>
+              <li><strong>language</strong>: this parameter enables you to limit the stream to Tweets written in a certain language. The following line of code requests Tweets whose autodetected language is Spanish: <code>url = "https://stream.twitter.com/1/statuses/sample.json?language=es"</code></li>
+              <li><strong>track</strong>: this parameter allows you to specify a search term or list of terms, and only returns Tweets containing at least one of the search terms. The following line of code requests Tweets containing the term “school”: <code>url = "https://stream.twitter.com/1/statuses/filter.json?track=school"</code></li>
+              <li><strong>locations</strong>: this parameter allows you to specify the location(s) from which Tweets should be retrieved. You will need to specify locations as bounding boxes, which are defined by pairs of coordinates representing the southwest and northeast corners of the box. Note that Twitter, unlike most other sources, places the longitude coordinate first and the latitude coordinate second. The following query returns Tweets from the San Francisco Bay Area: <code>url = "https://stream.twitter.com/1.1/statuses/filter.json?locations= -122.544708,37.208457,-121.929474,38.041602"</code>
+              <img src="./assets/SF_bounding_box.png" alt="Map of San Francisco bay area with bounding box on it. The lower right corner of the bounding box (1)and the upper right corner of the bounding box (2) are marked by pins and define the rectangle that makes up the bounding box.">
+              The map above is from <a href="http://earthexplorer.usgs.gov/">http://earthexplorer.usgs.gov/</a>, which is helpful for finding the coordinates of your desired bounding box. It shows the SW coordinate (1), the NE coordinate (2), and the bounding box they specify (white outline).
+              </li>
+            </ul>
+
+            <p>Are filters straightforward to use? Well, yes and no. They are very useful for sampling a specific subset of Twitter data, but they have some quirks and peculiarities to watch out for. Specifically, certain filters can only be applied to certain streaming endpoints, and not all filters can be used in combination with each other.</p>
+
+            <h4>Different Streaming Endpoints</h4>
+            <p>You’ll notice that in the example above, the language filter is included in a query with syntax statuses/sample, while the track and locations filters are included in queries with syntax statuses/filter. “Sample” and “filter” are two different streaming endpoints, and have different tolerances for filters, as discussed in more detail in the Twitter documentation (referenced above). If use the “filter” endpoint, you have to specify either a track or a locations filter (you can also use follow, an option I don’t discuss here). If you instead use the “sample” endpoint, you can use the language filter, but will get an error if you try to use a track or locations filter.</p>
+
+            <h4>Combinable (and Non-Combinable) Filters</h4>
+            <p>An important consideration if you are trying to get data with specific properties is that certain filters can only be combined with a logical OR (not with a logical AND). For instance, if you specify both track and locations using the “filter” endpoint, you’ll get tweets are either from the Bay Area or contain the keyword “Obama” – not things with both those properties. If you want a sample of Tweets that is limited by both location and subject, you’ll need to stream based on one of these two parameters (generally, I would recommend location), then manually filter your data for the other in Python.</p>
+
+            <h4>Non-Rectangular Location Queries</h4>
+            <p>When you are filtering Tweets by location, not every area you might want to cover is going to be shaped like a rectangle. In some cases, you might want to cover several separate, rectangular areas (e.g., major U.S. metropolitan areas, including New York, San Francisco, etc.), while in others, you might want to cover a single area that happens not to be shaped like a rectangle (e.g., Brazil). In these cases, you can specify multiple bounding boxes (by adding additional pairs of SW/NE corner coordinates), either covering distinct areas or building up a large, irregularly shaped area from smaller rectangles. For example, the following example would (roughly) cover the continental U.S.: <code>url = "https://stream.twitter.com/1.1/statuses/filter.json?locations= -169.9,51.3,-141.7,72.2,-98.9,25.9,-65.7,49.7, -106.9,25.9,-99.1,49.8,-124.6,30.06,-106.9,49.7"</code>
+
+            <p>It’s okay if your bounding boxes aren’t perfect (e.g., if you get a little bit of Mexico or Canada in your U.S. sample) – you can always check the metadata of your tweets at a later processing step to confirm that they’re in your target region.</p>
+
+            <p>Once you’ve formulated a query to retrieve tweets with the desired properties, you can begin collecting data. In my case, this meant leaving my decade-old laptop on all the time, patiently gathering tweets as they came in. Once you some stored data to play with, you’ll be ready to parse your tweets (which come in JSON format, containing UTF-8 text and lots of metadata) and start doing some real analysis. So, thanks for reading, and I hope you’ll tune in next time for “How to parse tweets”!</p>
+          </div>
+        </article>
+
+        <article class="blog-post">
+
+          <div class="article-header">
+            <h2>Streaming Twitter: Getting a basic Twitter stream</h2>
+            <h3>Emily Abrash | Sunday, September 28, 2014</h3>
+          </div>
+
+          <div class="article-body">
+            <p>Everything I know about streaming Twitter data, I learned from Coursera.</p>
+
+            <p>Well, maybe not everything. But it’s true that when I looked at the first assignment for Bill Howe’s <a href="https://www.coursera.org/specializations/data-science">Introduction to Data Science Course</a>, I realized that if I could figure out how to do the assignment, I would have all the basic tools I needed to acquire, parse, and analyze Twitter data.</p>
+
+            <p>Mind you, I haven’t actually watched the course videos yet (maybe after I graduate), but the assignment instructions were very useful, particularly for getting and using the hardwired credentials necessary to access the Twitter API. With a little trial and error, I was able to build on that foundation using the <a href="https://dev.twitter.com/overview/documentation">Twitter documentation</a>, and was ultimately able to get what I needed for my project – a reasonably high-volume stream of data originating from (or at least, somehow associated with) a particular geographical region.</p>
+
+            <a>In this two-part series of posts, I’ll discuss several aspects of how to get data from Twitter. In Part 1, I’ll simply describe how to get some Twitter data (a random-ish sample of all global Twitter data) streaming on your computer, mostly by directing the reader to Bill Howe's excellent guide on Coursera. In Part 2, I’ll talk about ways to filter or gate your request so that you get only a subsample of Tweets with particular properties – e.g., from a certain location, in a particular language, or containing a given keyword.</a>
+
+            <p>A few notes on system requirements and background:</p>
+            <ul>
+              <li>My programs are written using Python 2.7.3 in the IDLE development environment. If you want to use my code or write your own similar code, you will also need to install and use <a href="https://www.python.org/downloads/">Python</a>.</li>
+              <li>This blog will not teach you how to program in Python, but if you have some coding experience (or even if you don’t), Python is a relatively friendly language to pick up. Some good resources for self-teaching Python include the <a href="https://www.codecademy.com/learn/all">CodeAcademy course</a> and <a>Google’s Python class</a>.</li>
+              <li>All my programs are tested on a Windows XP or Windows 7 computer. I think most of the code should be portable to a different OS, but setup details (e.g., how to install packages) may differ.</li>
+            </ul>
+
+            <h4>Step 1: Getting a Basic Twitter Stream</h4>
+
+            <p>In the scheme of programming feats, streaming data from Twitter is not very complicated. In fact, if you go to the <a href="https://github.com/uwescience/datasci_course_materials">Github repository</a> for Introduction to Data Science, you can find a nice, simple piece of working code that does just that – all you have to do is press the button. Right?</p>
+
+            <p>Well, yes and no. For one thing, that code has some credential and package dependencies that have to be satisfied, and which (while not intellectually interesting) can be a barrier if you’ve never queried an API before…which I most definitely hadn’t. Also, while the code may work for you once you’ve satisfied these dependencies, it may not be especially clear how it works – which is important if you want to modify it, e.g., to write data to a file in different formats, or to make queries of different types. I’ll discuss how to modify queries in the second post of this series.</p>
+
+            <p>The code that I'll point you to today isn’t mine at all – rather, it’s the template code in the Introduction to Data Science <a href="https://github.com/uwescience/datasci_course_materials/tree/master/assignment1">Assignment 1</a> folder on Github. If you are not familiar with Github, it’s an online code repository with useful features for version control. However, you don’t need to understand these features to get the Assignment 1 materials. You can simply access the link above and click the “Download ZIP” button on the right-hand side of the page. This should give you a ZIP folder containing several Python files, including twitterstream.py (the streaming template), as well as an HTML file (“assignment1.html”) and some text files.</p>
+
+            <p>Open up “assignment1.html” and scroll down to the header “Problem 1: Get Twitter Data.” As described in the instructions, you need to complete several setup steps before you can begin streaming data:</p>
+            <ul>
+              <li>First, you will need to use the Twitter website to get authentication credentials that you can use to connect securely to the Twitter API. These are a set of unique codes that identify you, and which are necessary in order to query the Twitter API. (To use these codes, paste them into the twitterstream.py file in the appropriate spot, as shown in the instructions.)</li>
+              <li>Second, you will need to install the oauth2 library on your computer. oauth2 enables you to submit your credentials and thus make a secure request to the Twitter API. To install oauth2, you may first wish to install the <a href="https://pypi.python.org/pypi/setuptools">easy_install python package</a>, then use the command “easy_install oauth2” from the Windows command line. If you are still unable to import oauth2 in Python, you may need to figure out where easy_install put the oauth2 package, and add this location to the <a href="https://docs.python.org/2/using/cmdline.html#envvar-PYTHONPATH">PYTHONPATH variable.</a></li>
+            </ul>
+            <p>Now, you should be ready to run twitterstream.py and get your first stream of Twitter data. You can run the script from either the Windows command line (navigating to directory that contains the file, then typing “twitterstream.py”) or from within a development environment like IDLE. The output should be a stream of tweets, accompanied by a lot of metadata in bracketed-dictionary format (JSON format, which I'll discuss a couple posts down the road).</p>
+
+            <p>It can be kind of a rush the first time you see the data flowing – I remember how psyched I was that I had gotten the code to work, and how powerful I suddenly felt, as if no data-mining challenge were beyond my reach. Overconfidence? Maybe a tad. But getting a datastream going is the first step towards being able to collect the specific Twitter sample you need...which will be the topic of the second post in this series, “Putting filters on your query."</p>
+          </div>
+        </article>
+
+        <article class="blog-post">
+
+          <div class="article-header">
+            <h2>So you want to stream Twitter...</h2>
+            <h3>Emily Abrash | Monday, September 22, 2014</h3>
+          </div>
+
+          <div class="article-body">
+
+            <p>Around the end of June this year, I was bitten by a bug. To be precise, a programming bug.<p>
+
+            <p>To give you some context, I was at the time a 5th (almost 6th) year graduate student in molecular biology, less than six months away from my thesis defense date. My work was on the development of stomata, plant leaf pores that regulate gas exchange, and had next to nothing to do with programming.  The amount of free time I had, while not a negative number, was not a large one either. In short, it wasn’t a particularly intuitive or opportune time to kick off some recreational programming.</p>
+
+            <p>So why, you may ask, did I start programming? The reason why I started was not a particularly noble one. Five years into my Ph.D., I was feeling less and less certain that I was cut out for an academic career, and becoming more and more aware that the options for biology Ph.D.s outside of academia were limited (particularly if you studied a small, weedy plant rather than, say, immunology). Around that time, I saw an email circular about a program called <a href="http://insightdatascience.com/">Insight</a>, which was designed to help Ph.D.s from various scientific disciplines transition to data analysis jobs in the tech sector.  My dad is a programmer, and so I knew that while the tech sector had its problems, it also had some excellent features like abundant jobs, decent pay, and the chance to do something insanely cool that had a major effect on the world.</p>
+
+            <p>I thought about the program for about two days, and the longer I thought, the more convinced I became that Insight was a once-in-a-lifetime chance, a tiny moving window; and that if I wanted to escape a lifetime of teaching high school, editing technical publications, or working for Monsanto, I had to bodily fling myself through that window, with every ounce of strength that I had. And what that meant was developing data science credentials, and quickly. What that meant was, I needed to do some programming.</p>
+
+            <p>So, that was why I started. That was why I wrote a very embarrassed email to a Nobel laureate (the extremely nice Andy Fire), asking if I could join his Python for Biologists course a week and a half late. That was why I gingerly tried out the first homework assignment, in which I induced Python to spit out the Fibonacci series and some trimmed small RNA sequences.</p>
+
+            <p>It was not, however, why I continued. Over the course of my Ph.D., I’ve thought I wanted to be a lot of things: journal editor, technical writer, high-school teacher, undergraduate-institution professor. Even a novelist or, on the lowest of days, a dental hygienist. The unifying characteristic of all these career aspirations is that they haven’t stuck. I’ve been excited about them for some period of time, then lost interest as I’ve realized that the reality of the job was considerably less appealing than my mental abstraction. Honestly, I expected programming to go the same way.</p>
+
+            <p>It didn’t. What I discovered, in the course of just a few Python for Biologists assignments, was that programming was awesome. It was more than awesome; it was a magical zone into which I could drop completely, something in which I could immerse myself with complete concentration, my often distractible mind focusing itself into a narrow beam of energy. I forgot everything else: lab work, worries, food, time of day. Whenever I started to program, I went into the zone and didn’t want to come out. That feeling was why I continued programming; that feeling, and the thought that if I could simply prove myself, if I could just be good enough, I would get to do this every single day.</p>
+
+            <p>All of which is to explain why, in the middle of August, I started on my Twitter project. My original rationale for picking Twitter was simply that I wanted some big data to play with, and Twitter’s happened to be publicly available. Being an intractable <a href="http://www.forestridge.org/page">Child of the Sacred Heart</a>, I soon realized that I could use Twitter to analyze something socially redeeming. So, I set out to measure attitudes towards education in different geographical regions of the Bay Area. The ultimate goal was to identify factors (co-occuring words/ ideas, user characteristics, and/or user connectivity characteristics) that predisposed high school students from underprivileged areas towards positive or negative attitudes about college.</p>
+
+            <p>I planned to do all of this during night and weekend hours, in about a month, while finishing my Ph.D. thesis. Needless to say, I have yet to fulfill the grandeur of my original vision. However, I have managed to meet some incremental goals: stream messages from Twitter, parse them, split them by locale, assign them affect scores, and measure average affect for education-related keywords. On top of that, I’ve learned some other useful things: that my dataset is way too small for what I planned to do; that my program architecture becomes painfully clunky as locales and query terms are scaled up; and that several weeks of Twitter data (even slow, geo-filtered Twitter data) will explode the brain of my ten-year-old Dell laptop.</p>
+
+            <p>So, I am not here to showcase a glossy, perfect project. Instead, I am here because I’ve learned some things that I think other people might find useful, like how to stream Twitter data, filter for geographical location (hint: get ready to draw lots of overlapping coordinate boxes), parse json files, work with UTF-8 formatting (you don’t want to lose those emoticons, do you?), and calculate a couple different kinds of affect scores.</p>
+
+            <p>My goal is to share what I’ve learned, so that someone else could easily implement a similar analysis for her/his queries, locations, and message properties of interest. And maybe even avoid some of the stupid (but highly educational) mistakes I've made.</p>
+
+            <p>Thanks for reading, and I hope you’ll tune in next time for my first technical article: “How to stream Twitter data”!</p>
+          </div>
+        </article>
+
+        <h4>Note on blog posts</h4>
+
+        <p> These  posts date from 2014, when I was experimenting with Twitter and large-scale data analysis. I haven't worked on this project for awhile, but it was a fun one!</p>
+
+        <p>These posts first appeared on <a href="http://emiprograms.blogspot.com">http://emiprograms.blogspot.com</a> (no longer updated).</p>
+
+      </section>
+    </div>
+
+    <footer>
+      <p>&copy; 2016 Emily Abrash</p>
+    </footer>
+
+  </body>
+
+</html>
