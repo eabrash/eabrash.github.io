@@ -152,7 +152,7 @@ footer p {
 .blog-post .article-body img {
   margin: 2% 0% 2% 0%;
   padding: 0 8% 0 8%;
-  max-width: 84%;
+  max-width: 500%;
 }
 
 .blog-post .article-body #map{
@@ -197,6 +197,6 @@ code {
 }
 
 #word-guess {
-  max-width: 100%;
+  max-width: 500px;
   border: 1px solid black;
 }
