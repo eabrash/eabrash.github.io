@@ -1,23 +1,49 @@
+body {
+  font-family: "Lato", Verdana, sans-serif;
+  font-size: 1.1rem;
+}
+
 header {
   text-align: center;
+  background-image: url("../assets/beach_thin-01.png");
+  background-size: cover;
+  overflow: hidden;
 }
 
-h1 {
-  font-family:'Homemade Apple', cursive;
-  font-size: 5vw;
-  background-image: url("../assets/beach_strip-01.png");
+header h1 {
+  font-family:'Cedarville Cursive', cursive;
   padding-top: 0%;
-  padding-bottom: 18%;
-  background-size: 100%;
+  margin-left: 0;
+  margin-top: 0.5%;
+  font-size: 2.5rem;
 }
 
-p {
-  font-family: "Lato", Verdana, sans-serif;
+header ul {
+  list-style-type: none;
+  margin-top: 15%;
+  margin-left: 0;
+  padding: 0;
+  /*background-color: rgba(255, 255, 255, 0.5);*/
+}
+
+header li {
+  display: inline-block;
+  padding: 0.5% 1.0% 0.5% 1.0%;
+  margin: 0% 0.5% 0% 0.5%;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 5px;
+}
+
+header li a {
+  text-decoration: none;
+}
+
+header li:hover {
+  background-color: rgba(255, 255, 255, 0.6);
 }
 
 #banner {
   width: 70%;
-  background-color: teal;
   overflow: hidden;
   padding-left: 15%;
   padding-right: 70%;
