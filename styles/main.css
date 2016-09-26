@@ -149,7 +149,13 @@ footer p {
   padding: 1% 5% 1% 5%;
 }
 
-.blog-post .article-body img{
+.blog-post .article-body img {
+  margin: 2% 0% 2% 0%;
+  padding: 0 8% 0 8%;
+  max-width: 84%;
+}
+
+.blog-post .article-body #map{
   margin: 2% 0% 2% 0%;
   padding: 0 15% 0 15%;
 }
@@ -190,26 +196,7 @@ code {
   border: 1px solid black;
 }
 
-/*nav {
-  display: inline-block;
-  width: 98vw;
-  text-align: center;
-  position: relative;
-  padding-right: 2vw;
+#word-guess {
+  max-width: 100%;
+  border: 1px solid black;
 }
-
-nav li {
-  display: inline-block;
-  list-style-type: none;
-  padding-left: 2vw;
-  padding-right: 2vw;
-}
-
-nav a {
-  text-decoration: none;
-  font-size: 1.5vw;
-}
-
-nav a:hover {
-  font-color: gray;
-}*/
