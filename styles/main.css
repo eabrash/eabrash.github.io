@@ -191,12 +191,12 @@ code {
   padding: 1% 5% 2% 5%;
 }
 
-#flood-fill {
-  max-width: 300px;
+#word-guess {
+  max-width: 500px;
   border: 1px solid black;
 }
 
-#word-guess {
-  max-width: 500px;
+#flood-fill {
+  max-width: 300px;
   border: 1px solid black;
 }
