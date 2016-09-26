@@ -191,7 +191,7 @@ code {
   padding: 1% 5% 2% 5%;
 }
 
-#guess {
+#word-guess {
   max-width: 500px;
   border: 1px solid black;
 }
